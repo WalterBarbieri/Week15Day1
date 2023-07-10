@@ -1,0 +1,101 @@
+<<<CREAZIONE TABELLE>>
+
+CREATE TABLE clienti (
+	numerocliente SERIAL PRIMARY KEY,
+	nome VARCHAR(20),
+	cognome VARCHAR(20),
+	datanascita DATE,
+	regioneresidenza VARCHAR(20)
+)
+
+CREATE TABLE fatture (
+	numerofattura SERIAL PRIMARY KEY,
+	tipologia VARCHAR(20),
+	importo INTEGER,
+	iva INTEGER,
+	idcliente INTEGER,
+	datafattura DATE,
+	numerofornitore INTEGER
+)
+CREATE TABLE prodotto (
+	idprodotto SERIAL PRIMARY KEY,
+	descrizione VARCHAR(20),
+	inproduzione BOOLEAN,
+	incommercio BOOLEAN,
+	dataattivazione DATE,
+	datadisattivazione DATE,
+)
+CREATE TABLE fornitori (
+	numerofornitore SERIAL PRIMARY KEY,
+	denominazione VARCHAR(20),
+	regioneresidenza VARCHAR(20)
+)
+
+<<INSERIMENTO VALORI NELLE TABELLE>>
+INSERT INTO public.clienti(
+	nome, cognome, datanascita, regioneresidenza)
+	VALUES ('Abete', 'Silvestre', '1980-8-20', 'Abruzzo'),
+	('Castagno', 'Marino', '1970-6-20', 'Marche'),
+	('Acero', 'Frondoso', '1980-6-20', 'Lazio'),
+	('Nocciolo', 'Frondoso', '1982-6-20', 'Toscana'),
+	('Arancio', 'Odoroso', '1982-6-20', 'Sicilia');
+
+INSERT INTO public.prodotto(
+	descrizione, inproduzione, incommercio, dataattivazione, datadisattivazione)
+	VALUES ('Prodotto Uno', TRUE, TRUE, '2017-01-01', NULL),
+('Prodotto Due', TRUE, FALSE, '2017-02-01', NULL),
+('Prodotto Tre', FALSE, TRUE, '2017-03-01', '2023-01-01'),
+('Prodotto Quattro', TRUE, TRUE, '2017-04-01', NULL),
+('Prodotto Cinque', FALSE, FALSE, '2017-05-01', '2022-05-01'),
+('Prodotto Sei', TRUE, FALSE, '2020-06-01', NULL),
+('Prodotto Sette', TRUE, TRUE, '2020-07-01', NULL),
+('Prodotto Otto', FALSE, TRUE, '2020-08-01', '2023-07-01'),
+('Prodotto Nove', TRUE, TRUE, '2020-09-01', NULL),
+('Prodotto Dieci', TRUE, FALSE, '2020-10-01', NULL);
+
+INSERT INTO public.fatture(
+	tipologia, importo, iva, idcliente, datafattura, numerofornitore)
+	VALUES ('A', 100.00, 20.00, 1, '2023-01-10', 1),
+('B', 150.50, 30.10, 2, '2023-02-15', 2),
+('A', 75.25, 15.05, 3, '2023-03-20', 3),
+('C', 200.00, 40.00, 1, '2023-04-25', 1),
+('B', 120.00, 24.00, 2, '2023-05-30', 2),
+('A', 85.00, 17.00, 3, '2023-06-05', 3),
+('C', 175.50, 35.10, 1, '2023-07-10', 1),
+('A', 225.25, 45.05, 2, '2023-08-15', 2),
+('B', 250.00, 50.00, 3, '2023-09-20', 1),
+('C', 300.00, 60.00, 1, '2023-10-25', 2);
+
+INSERT INTO public.fornitori(
+	denominazione, regioneresidenza)
+	VALUES ('Fornitore Uno', 'Lombardia'),
+('Fornitore Due', 'Lazio'),
+('Fornitore Tre', 'Campania'),
+('Fornitore Quattro', 'Sicilia'),
+('Fornitore Cinque', 'Veneto'),
+('Fornitore Sei', 'Emilia-Romagna'),
+('Fornitore Sette', 'Piemonte'),
+('Fornitore Otto', 'Puglia'),
+('Fornitore Nove', 'Toscana'),
+('Fornitore Dieci', 'Calabria');
+
+<<UPDATE VALORI>>
+
+UPDATE public.fatture
+	SET iva=20 WHERE iva = 40;
+
+<<RICERCA NOME E COGNOME CLIENTI BY DATA DI NASCITA>>
+
+SELECT nome, cognome 
+	FROM public.clienti where extract(year from datanascita) = 1982;
+
+<<RICERCA NUMERO FATTURE BY IVA>>
+
+SELECT numerofattura 
+	FROM public.fatture where iva = 20;
+
+<<RICERCA 
+
+
+
+
