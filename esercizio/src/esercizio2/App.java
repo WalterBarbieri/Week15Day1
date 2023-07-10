@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class App {
 
@@ -58,6 +60,20 @@ public class App {
 		Student theBest = getBest();
 		System.out.println("The best student is: " + theBest.getName() + " " + theBest.getLastname()
 				+ " with an average of: " + theBest.getAvg());
+
+		// SELECT: STUDENTS BETWEEN
+
+		List<Student> studentInRange = getVoteRange(6, 9);
+		System.out.println("Students in the selected range: ");
+		for (Student student : studentInRange) {
+			System.out.println("Name: " + student.getName());
+			System.out.println("Lastname: " + student.getLastname());
+			System.out.println("Gender: " + student.getGender());
+			System.out.println("Birthdate: " + student.getBirthdate());
+			System.out.println("Avg: " + student.getAvg());
+			System.out.println("Min Vote: " + student.getMin_vote());
+			System.out.println("Max Vote: " + student.getMax_vote());
+		}
 
 	}
 
@@ -158,5 +174,30 @@ public class App {
 		}
 
 		return null;
+	}
+
+	public static List<Student> getVoteRange(int min, int max) {
+		String sqlSelect = "SELECT * FROM public.school_students WHERE min_vote >= " + min + " AND max_vote <= " + max;
+		List<Student> students = new ArrayList<>();
+		try {
+			Statement s = conn.createStatement();
+			ResultSet resultSet = s.executeQuery(sqlSelect);
+
+			while (resultSet.next()) {
+				String name = resultSet.getString("name");
+				String lastname = resultSet.getString("lastname");
+				String gender = resultSet.getString("gender");
+				LocalDate birthdate = resultSet.getDate("birthdate").toLocalDate();
+				double avg = resultSet.getDouble("avg");
+				int min_vote = resultSet.getInt("min_vote");
+				int max_vote = resultSet.getInt("max_vote");
+
+				Student student = new Student(name, lastname, gender, birthdate, avg, min_vote, max_vote);
+				students.add(student);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return students;
 	}
 }
