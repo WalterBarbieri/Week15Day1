@@ -84,17 +84,38 @@ INSERT INTO public.fornitori(
 UPDATE public.fatture
 	SET iva=20 WHERE iva = 40;
 
-<<RICERCA NOME E COGNOME CLIENTI BY DATA DI NASCITA>>
+<<SELECT NOME E COGNOME CLIENTI BY DATA DI NASCITA>>
 
 SELECT nome, cognome 
 	FROM public.clienti where extract(year from datanascita) = 1982;
 
-<<RICERCA NUMERO FATTURE BY IVA>>
+<<SELECT NUMERO FATTURE BY IVA>>
 
 SELECT numerofattura 
 	FROM public.fatture where iva = 20;
 
-<<RICERCA 
+<<SELECT NUMERO FATTURE E SOMMA IMPORT BY ANNO FATTURAZIONE>>
+
+SELECT extract(year from datafattura) as annofattura, count(*), sum(importo)
+	FROM public.fatture group by annofattura;
+
+<<SELECT PRODOTTI ATTIVATI BY DATE E CONFERMA BOOLEAN>>
+
+SELECT * FROM public.prodotto 
+	where extract(year from dataattivazione) = 2017 and (inproduzione = true or incommercio = true)
+
+<<SELECT BY IVA COUNT YEAR>>
+
+SELECT extract(year from datafattura) as annofattura, count(*) from fatture where iva = 20 group by annofattura;
+
+<<SELECT YEAR WHERE TYPE A COUNT >=2 >>
+
+SELECT extract(year from datafattura) as annofattura from public.fatture where tipologia = 'A' group by annofattura having count (*)>2;
+
+<<SELECT FATTURE + NOME FORNITORE >>
+
+
+
 
 
 
