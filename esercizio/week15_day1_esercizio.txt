@@ -84,36 +84,53 @@ INSERT INTO public.fornitori(
 UPDATE public.fatture
 	SET iva=20 WHERE iva = 40;
 
-<<SELECT NOME E COGNOME CLIENTI BY DATA DI NASCITA>>
+UPDATE public.fatture
+	SET numerofornitore= 5 WHERE importo = 300;
+
+<<ES.1 SELECT NOME E COGNOME CLIENTI BY DATA DI NASCITA>>
 
 SELECT nome, cognome 
 	FROM public.clienti where extract(year from datanascita) = 1982;
 
-<<SELECT NUMERO FATTURE BY IVA>>
+<<ES.2 SELECT NUMERO FATTURE BY IVA>>
 
 SELECT numerofattura 
 	FROM public.fatture where iva = 20;
 
-<<SELECT NUMERO FATTURE E SOMMA IMPORT BY ANNO FATTURAZIONE>>
+<<ES.3 SELECT BY ANNO FATTURAZIONE CONTA NUMERO FATTURE E SOMMA IMPORT >>
 
 SELECT extract(year from datafattura) as annofattura, count(*), sum(importo)
 	FROM public.fatture group by annofattura;
 
-<<SELECT PRODOTTI ATTIVATI BY DATE E CONFERMA BOOLEAN>>
+<<ES.4 SELECT PRODOTTI ATTIVATI BY DATE E CONFERMA BOOLEAN>>
 
 SELECT * FROM public.prodotto 
 	where extract(year from dataattivazione) = 2017 and (inproduzione = true or incommercio = true)
 
-<<SELECT BY IVA COUNT YEAR>>
+<<ES.5 SELECT BY IVA COUNT BY YEAR>>
 
 SELECT extract(year from datafattura) as annofattura, count(*) from fatture where iva = 20 group by annofattura;
 
-<<SELECT YEAR WHERE TYPE A COUNT >=2 >>
+<<ES.6 SELECT YEAR WHERE TYPE A COUNT >=2 >>
 
 SELECT extract(year from datafattura) as annofattura from public.fatture where tipologia = 'A' group by annofattura having count (*)>2;
 
-<<SELECT FATTURE + NOME FORNITORE >>
+<<ES.7 SELECT FATTURE + NOME FORNITORE >>
 
+SELECT f.numerofattura, f.importo, f.iva, f.datafattura, fo.denominazione from public.fatture f inner join public.fornitori fo on f.numerofornitore = fo.numerofornitore;
+
+<<ES.8 SELECT BY RESIDENZA SOMMA IMPORTI>>
+
+SELECT c.regioneresidenza, sum(f.importo) from public.fatture f inner join public.clienti c on f.idcliente = c.numerocliente group by c.regioneresidenza;
+
+<<ES.9 SELECT BY FATTURA E ANNONASCITA>>
+
+SELECT count(distinct c.numerocliente) from public.clienti c inner join public.fatture f on c.numerocliente = f.idcliente where extract(year from c.datanascita) = 1980 and f.importo > 50;
+
+<ES.10SELECT BY REGIONE E CONCAT >>
+
+
+SELECT concat(nome, '-', cognome) as denominazione from public.clienti where regioneresidenza = 'Lazio';
 
 
 

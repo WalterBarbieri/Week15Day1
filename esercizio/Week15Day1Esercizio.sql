@@ -1,0 +1,1 @@
+SELECT concat(nome, '-', cognome) as denominazione from public.clientiwhere regioneresidenza = 'Lazio';
